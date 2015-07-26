@@ -2,6 +2,7 @@ package com.king.model.comparator.highscore;
 
 import com.king.model.HighScore;
 import com.king.model.User;
+import com.king.model.comparator.highscore.impl.HighScoreReverseOrderComparator;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;

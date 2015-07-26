@@ -2,9 +2,13 @@ package com.king.model;
 
 public class User {
 
-    private String userId;
+    private Integer userId;
 
-    public User(String userId) {
+    public User(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getUserId() {
+        return userId;
     }
 }

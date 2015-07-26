@@ -1,7 +1,7 @@
 package com.king.model;
 
 import com.king.model.comparator.highscore.HighScoreComparator;
-import com.king.model.comparator.highscore.HighScoreReverseOrderComparator;
+import com.king.model.comparator.highscore.impl.HighScoreReverseOrderComparator;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

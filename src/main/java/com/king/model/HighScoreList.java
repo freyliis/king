@@ -36,8 +36,8 @@ public class HighScoreList {
     }
 
     public void addScoreToHighScoreList(HighScore highScore) {
-        highScoreList.add(highScore);
-        Collections.sort(highScoreList, highScoreComparator);
-        highScoreList = highScoreList.subList(0, highScoreListSize);
+            highScoreList.add(highScore);
+            Collections.sort(highScoreList, highScoreComparator);
+            highScoreList = highScoreList.subList(0, highScoreListSize);
     }
 }

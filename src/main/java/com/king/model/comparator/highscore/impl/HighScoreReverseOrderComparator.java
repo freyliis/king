@@ -1,6 +1,7 @@
-package com.king.model.comparator.highscore;
+package com.king.model.comparator.highscore.impl;
 
 import com.king.model.HighScore;
+import com.king.model.comparator.highscore.HighScoreComparator;
 
 /**
  * Created by freyliis

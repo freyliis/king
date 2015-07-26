@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Level {
 
-
     private Integer levelId;
     private HighScoreList highScoreList;
 
@@ -13,5 +12,7 @@ public class Level {
         this.highScoreList = highScoreList;
     }
 
-
+    public HighScoreList getHighScoreList() {
+        return highScoreList;
+    }
 }
