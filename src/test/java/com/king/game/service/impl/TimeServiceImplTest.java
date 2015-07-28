@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class TimeServiceImplTest {
 
     TimeService objectUnderTest = new TimeServiceImpl();
+
     @Test
     public void shouldRetrun1NanoDifferenceWhenIncreasing(){
         LocalDateTime now = LocalDateTime.now();
@@ -26,4 +27,10 @@ public class TimeServiceImplTest {
         Assert.assertThat(difference, CoreMatchers.is(1l));
     }
 
+    @Test
+    public void shouldReturnProperNanoSecondsCountFrom1Minute(){
+        final long nanoSeconds = objectUnderTest.convertMinutesToNanos(1l);
+        Double minuteInNano = 1*60*Math.pow(10,9);
+        Assert.assertThat(nanoSeconds, CoreMatchers.is(minuteInNano.longValue()));
+    }
 }
