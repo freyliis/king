@@ -6,17 +6,21 @@ import java.util.UUID;
 public class Session {
 
     private UUID sessionId;
-    private LocalDateTime localDateTime;
+    private LocalDateTime sessionStartTime;
     private Integer userId;
 
     public Session(Integer userId) {
         this.sessionId = UUID.randomUUID();
         this.userId = userId;
-        localDateTime = LocalDateTime.now();
+        sessionStartTime = LocalDateTime.now();
     }
 
 
     public String getSessionId() {
         return sessionId.toString();
+    }
+
+    public LocalDateTime getSessionStartTime() {
+        return sessionStartTime;
     }
 }

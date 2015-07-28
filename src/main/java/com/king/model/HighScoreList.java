@@ -35,9 +35,15 @@ public class HighScoreList {
         return true;
     }
 
-    public void addScoreToHighScoreList(HighScore highScore) {
-            highScoreList.add(highScore);
+    public void addScoreToHighScoreListAndResize(HighScore highScore) {
+        highScoreList.add(highScore);
+        resizeHighScoreList();
+    }
+
+    private void resizeHighScoreList() {
+        if (highScoreList.size() > highScoreListSize) {
             Collections.sort(highScoreList, highScoreComparator);
             highScoreList = highScoreList.subList(0, highScoreListSize);
+        }
     }
 }

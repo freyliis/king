@@ -25,12 +25,13 @@ public class HighScoreListTest {
     HighScoreComparator highScoreComparator = new HighScoreReverseOrderComparator();
     @Mock
     User user;
-    HighScore highScore = new HighScore(user, 100);
+    HighScore highScore;
     HighScoreList objectUnderTest;
 
     @Before
     public void setUp() {
         highScores = new ArrayList<HighScore>();
+        highScore = new HighScore(user, 100);
         objectUnderTest = new HighScoreList(highScores, 2, highScoreComparator);
     }
 
@@ -54,28 +55,28 @@ public class HighScoreListTest {
         highScores.add(new HighScore(user, 200));
         highScores.add(new HighScore(user, 300));
         boolean isAdded = objectUnderTest.isHighScore(highScore);
-        Assert.assertThat(isAdded, CoreMatchers.is(Boolean.TRUE));
+        Assert.assertThat(isAdded, CoreMatchers.is(Boolean.FALSE));
     }
 
     @Test
     public void testSuccessdAddHighScoreInEmptyHighScoreList() {
-        objectUnderTest.addScoreToHighScoreList(highScore);
-        Assert.assertThat(highScores.contains(highScore), CoreMatchers.is(Boolean.TRUE));
+        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+        Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.TRUE));
     }
 
     @Test
     public void testFailedAddHighScoreInFullHighScoreList() {
         highScores.add(new HighScore(user, 200));
         highScores.add(new HighScore(user, 300));
-        objectUnderTest.addScoreToHighScoreList(highScore);
-        Assert.assertThat(highScores.contains(highScore), CoreMatchers.is(Boolean.FALSE));
+        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+        Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.FALSE));
     }
 
     @Test
     public void testSuccessAddHighScoreInFullHighScoreList() {
         highScores.add(new HighScore(user, 12));
         highScores.add(new HighScore(user, 13));
-        objectUnderTest.addScoreToHighScoreList(highScore);
-        Assert.assertThat(highScores.contains(highScore), CoreMatchers.is(Boolean.TRUE));
+        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+        Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.TRUE));
     }
 }
