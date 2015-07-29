@@ -7,11 +7,11 @@ public class Session {
 
     private UUID sessionId;
     private LocalDateTime sessionStartTime;
-    private Integer userId;
+    private User user;
 
     public Session(Integer userId) {
         this.sessionId = UUID.randomUUID();
-        this.userId = userId;
+        this.user = new User(userId);
         sessionStartTime = LocalDateTime.now();
     }
 
@@ -22,5 +22,9 @@ public class Session {
 
     public LocalDateTime getSessionStartTime() {
         return sessionStartTime;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

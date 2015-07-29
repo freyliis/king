@@ -8,4 +8,6 @@ public interface SessionService {
 
     Session createSession(Integer userId);
 
+    Session getSession(String sessionKey);
+
 }

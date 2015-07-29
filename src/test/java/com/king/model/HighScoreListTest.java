@@ -20,63 +20,43 @@ import java.util.List;
 public class HighScoreListTest {
 
     Integer levelId = 1;
-    List<HighScore> highScores;
+    List<Score> scores;
 
     HighScoreComparator highScoreComparator = new HighScoreReverseOrderComparator();
     @Mock
     User user;
-    HighScore highScore;
-    HighScoreList objectUnderTest;
+    Score highScore;
+    ScoreList objectUnderTest;
 
     @Before
     public void setUp() {
-        highScores = new ArrayList<HighScore>();
-        highScore = new HighScore(user, 100);
-        objectUnderTest = new HighScoreList(highScores, 2, highScoreComparator);
+        scores = new ArrayList<Score>();
+        highScore = new Score(user, 100);
     }
 
-    @Test
-    public void testIsHighScoreInListWithOneElement() {
-        highScores.add(new HighScore(user, 12));
-        boolean isAdded = objectUnderTest.isHighScore(highScore);
-        Assert.assertThat(isAdded, CoreMatchers.is(Boolean.TRUE));
-    }
 
     @Test
-    public void testIsHighScoreInFullHighScoreList() {
-        highScores.add(new HighScore(user, 12));
-        highScores.add(new HighScore(user, 13));
-        boolean isAdded = objectUnderTest.isHighScore(highScore);
-        Assert.assertThat(isAdded, CoreMatchers.is(Boolean.TRUE));
-    }
-
-    @Test
-    public void testIsNotHighScoreInFullHighScoreList() {
-        highScores.add(new HighScore(user, 200));
-        highScores.add(new HighScore(user, 300));
-        boolean isAdded = objectUnderTest.isHighScore(highScore);
-        Assert.assertThat(isAdded, CoreMatchers.is(Boolean.FALSE));
-    }
-
-    @Test
-    public void testSuccessdAddHighScoreInEmptyHighScoreList() {
-        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+    public void testAddScoreInEmptyHighScoreList() {
+        objectUnderTest = new ScoreList(scores, 2, highScoreComparator);
+        objectUnderTest.addScoreToScoreList(highScore);
         Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.TRUE));
     }
 
     @Test
-    public void testFailedAddHighScoreInFullHighScoreList() {
-        highScores.add(new HighScore(user, 200));
-        highScores.add(new HighScore(user, 300));
-        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+    public void testNonHighScoreInFullHighScoreList() {
+        scores.add(new Score(user, 200));
+        scores.add(new Score(user, 300));
+        objectUnderTest = new ScoreList(scores, 2, highScoreComparator);
+        objectUnderTest.addScoreToScoreList(highScore);
         Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.FALSE));
     }
 
     @Test
-    public void testSuccessAddHighScoreInFullHighScoreList() {
-        highScores.add(new HighScore(user, 12));
-        highScores.add(new HighScore(user, 13));
-        objectUnderTest.addScoreToHighScoreListAndResize(highScore);
+    public void testHighScoreInFullHighScoreList() {
+        scores.add(new Score(user, 12));
+        scores.add(new Score(user, 13));
+        objectUnderTest = new ScoreList(scores, 2, highScoreComparator);
+        objectUnderTest.addScoreToScoreList(highScore);
         Assert.assertThat(objectUnderTest.getHighScoreList().contains(highScore), CoreMatchers.is(Boolean.TRUE));
     }
 }

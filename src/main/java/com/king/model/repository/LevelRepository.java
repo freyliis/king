@@ -8,4 +8,5 @@ import com.king.model.Level;
 public interface LevelRepository {
 
     Level getLevel(Integer levelId);
+
 }

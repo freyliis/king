@@ -30,25 +30,36 @@ public class SessionServiceImplTest {
     TimeService timeService;
 
     SessionService objectUnderTest;
+    private long sessionValidTimeInMinutes = 10;
 
     @Before
     public void setUp() {
-        objectUnderTest = new SessionServiceImpl(sessionRepository, timeService);
+        objectUnderTest = new SessionServiceImpl(sessionRepository, timeService, sessionValidTimeInMinutes);
         when(sessionRepository.getSession(anyString())).thenReturn(session);
-    }
+        when(timeService.convertMinutesToNanos(sessionValidTimeInMinutes)).thenReturn(sessionValidTimeInMinutes);
+       }
 
     @Test
-    public void shouldReturnTrueWhenSessionActiveForLessThan10Min() {
-        LocalDateTime start = LocalDateTime.now().minusMinutes(10);
-        when(session.getSessionStartTime()).thenReturn(start);
+    public void shouldReturnTrueWhenSessionActiveFor10Min() {
+        when(timeService.calculateAbsDifferenceInNano(any(LocalDateTime.class),
+                any(LocalDateTime.class))).thenReturn(sessionValidTimeInMinutes);
         boolean sessionKeyActive = objectUnderTest.isSessionKeyActive("id");
         Assert.assertThat(sessionKeyActive, CoreMatchers.is(Boolean.TRUE));
     }
 
     @Test
+    public void shouldReturnTrueWhenSessionActiveForLessThan10Min() {
+        when(timeService.calculateAbsDifferenceInNano(any(LocalDateTime.class),
+                any(LocalDateTime.class))).thenReturn(sessionValidTimeInMinutes-1);
+        boolean sessionKeyActive = objectUnderTest.isSessionKeyActive("id");
+        Assert.assertThat(sessionKeyActive, CoreMatchers.is(Boolean.TRUE));
+    }
+
+
+    @Test
     public void shouldReturnTrueWhenSessionActiveForMoreThan10Min() {
-        LocalDateTime start = LocalDateTime.now().minusMinutes(10).minusNanos(1);
-        when(session.getSessionStartTime()).thenReturn(start);
+        when(timeService.calculateAbsDifferenceInNano(any(LocalDateTime.class),
+                any(LocalDateTime.class))).thenReturn(sessionValidTimeInMinutes+1);
         boolean sessionKeyActive = objectUnderTest.isSessionKeyActive("id");
         Assert.assertThat(sessionKeyActive, CoreMatchers.is(Boolean.FALSE));
     }

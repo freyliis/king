@@ -13,9 +13,10 @@ public class SessionServiceImpl implements SessionService {
     private long sessionValidTimeInMinutes = 10l;
     private TimeService timeService;
 
-    public SessionServiceImpl(SessionRepository sessionRepository, TimeService timeService) {
+    public SessionServiceImpl(SessionRepository sessionRepository, TimeService timeService, long sessionValidTimeInMinutes) {
         this.sessionRepository = sessionRepository;
         this.timeService = timeService;
+        this.sessionValidTimeInMinutes = sessionValidTimeInMinutes;
     }
 
     public boolean isSessionKeyActive(String sessionKey) {
@@ -30,6 +31,12 @@ public class SessionServiceImpl implements SessionService {
     }
 
     public Session createSession(Integer userId) {
-        return null;
+        Session session = new Session(userId);
+        sessionRepository.saveSession(session);
+        return session;
+    }
+
+    public Session getSession(String sessionKey) {
+        return sessionRepository.getSession(sessionKey);
     }
 }

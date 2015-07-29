@@ -1,6 +1,6 @@
 package com.king.model.comparator.highscore;
 
-import com.king.model.HighScore;
+import com.king.model.Score;
 import com.king.model.User;
 import com.king.model.comparator.highscore.impl.HighScoreReverseOrderComparator;
 import org.hamcrest.CoreMatchers;
@@ -19,9 +19,9 @@ public class HighScoreReverseOrderComparatorTest {
 
     @Mock
     User user;
-    HighScore score1 = new HighScore(user, 100);
-    HighScore score2 = new HighScore(user, 100);
-    HighScore score3 = new HighScore(user, 200);
+    Score score1 = new Score(user, 100);
+    Score score2 = new Score(user, 100);
+    Score score3 = new Score(user, 200);
     HighScoreReverseOrderComparator objectUndertest = new HighScoreReverseOrderComparator();
 
     @Test
