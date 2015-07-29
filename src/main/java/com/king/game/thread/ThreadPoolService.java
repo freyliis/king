@@ -1,22 +1,13 @@
 package com.king.game.thread;
 
-import com.king.game.service.GameOfThroneService;
+/**
+ * Created by freyliis
+ */
+public interface ThreadPoolService {
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+    public void createAndRunPostUserScoreThread(Integer score, Integer levelId, String sessionId);
 
-public class ThreadPoolService {
+    public String createAndRunUserLoginThread(String userId);
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-    private GameOfThroneService gameOfThroneService;
-
-    public ThreadPoolService(GameOfThroneService gameOfThroneService) {
-        this.gameOfThroneService = gameOfThroneService;
-    }
-
-    public void createAndRunPostUserScoreThread(Integer score, Integer levelId, String sessionId)
-    {
-        PostUserScoreThread postUserScoreThread = new PostUserScoreThread(score, levelId, sessionId, gameOfThroneService);
-        threadPool.submit(postUserScoreThread);
-    }
+    public String createAndRunHighScoreListThread(Integer levelId);
 }

@@ -1,12 +1,12 @@
 package com.king.game.http;
 
-public enum MessageInfo {
+public enum GetRequestInfo {
 
     LOGIN("login"), HIGHSCORE("highscorelist"), EMPTY("");
 
     private String uriMessage;
 
-    MessageInfo(String uriMessage) {
+    GetRequestInfo(String uriMessage) {
         this.uriMessage = uriMessage;
     }
 
@@ -14,8 +14,8 @@ public enum MessageInfo {
         return uriMessage;
     }
 
-    public static MessageInfo getMessageInfo(String value) {
-        for (MessageInfo info : values()) {
+    public static GetRequestInfo getRequestInfo(String value) {
+        for (GetRequestInfo info : values()) {
             if (info.getUriMessage().equalsIgnoreCase(value)) {
                 return info;
             }

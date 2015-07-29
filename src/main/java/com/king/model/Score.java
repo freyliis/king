@@ -13,4 +13,10 @@ public class Score {
     public Integer getScore() {
         return score;
     }
+
+    @Override
+    public String toString() {
+        return ""+user.getUserId() +
+                "=" + score;
+    }
 }

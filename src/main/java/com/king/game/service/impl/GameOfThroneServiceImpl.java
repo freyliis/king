@@ -2,8 +2,12 @@ package com.king.game.service.impl;
 
 import com.king.game.service.GameOfThroneService;
 import com.king.game.service.SessionService;
-import com.king.model.*;
+import com.king.model.Level;
+import com.king.model.Score;
+import com.king.model.Session;
 import com.king.model.repository.LevelRepository;
+
+import java.util.Set;
 
 /**
  * Created by freyliis
@@ -13,7 +17,7 @@ public class GameOfThroneServiceImpl implements GameOfThroneService {
     private LevelRepository levelRepository;
     private SessionService sessionService;
 
-    public ScoreList getHighscoreList(int levelId) {
+    public Set<Score> getHighscoreList(int levelId) {
         Level level = levelRepository.getLevel(levelId);
         return level.getHighScoreList();
     }

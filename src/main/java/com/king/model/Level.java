@@ -1,6 +1,7 @@
 package com.king.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class Level {
 
@@ -12,8 +13,12 @@ public class Level {
         this.highScoreList = highScoreList;
     }
 
-    public ScoreList getHighScoreList() {
+    public ScoreList getScoreList() {
         return highScoreList;
+    }
+
+    public Set<Score> getHighScoreList() {
+        return highScoreList.getHighScoreList();
     }
 
     public void postScore(Integer scoreInt, User user) {

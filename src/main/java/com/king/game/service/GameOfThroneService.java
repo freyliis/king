@@ -1,10 +1,12 @@
 package com.king.game.service;
 
-import com.king.model.ScoreList;
+import com.king.model.Score;
+
+import java.util.Set;
 
 public interface GameOfThroneService {
 
-    ScoreList getHighscoreList(int level);
+    Set<Score> getHighscoreList(int level);
 
     void postUserScore(String sessionId, Integer levelId, Integer score);
 

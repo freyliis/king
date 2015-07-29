@@ -1,49 +1,69 @@
 package com.king.game.http;
 
+import com.king.game.thread.ThreadPoolService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
-import java.net.URI;
 
 public class GameHttpHandler implements HttpHandler {
 
     public static final String URI_DELIMITER = "/";
     public static final String PARAMETERS_DELIMITER = "=";
 
-    @Override
+    private ThreadPoolService threadPoolService;
+    private PostRequestParser postRequestParser;
+    private GetRequestParser getRequestParser;
+
+    public GameHttpHandler(ThreadPoolService threadPoolService, PostRequestParser postRequestParser, GetRequestParser getRequestParser) {
+        this.threadPoolService = threadPoolService;
+        this.postRequestParser = postRequestParser;
+        this.getRequestParser = getRequestParser;
+    }
+
     public void handle(HttpExchange httpExchange) throws IOException {
 
-        String url = httpExchange.getRequestURI().getPath();
         final String requestMethod = httpExchange.getRequestMethod();
         if (requestMethod.equalsIgnoreCase("POST")) {
-//            httpExchange.getRequestURI().getQuery();
-        } else if (requestMethod.equalsIgnoreCase("GET")) {
+            handlePostRequest(httpExchange);
 
+        } else if (requestMethod.equalsIgnoreCase("GET")) {
+            handleGetRequest(httpExchange);
         } else {
 
         }
     }
-///<levelid>/score?sessionkey=<sessionkey>
-    public String parsePostScoreMessageForLevelId(String path) {
-        String[] pathSplitted = path.split(URI_DELIMITER);
-        return pathSplitted[0];
-    }
-//sessionkey=<sessionkey>
-    public String parsePostScoreMessageForSessionKey(String path) {
-        String[] pathSplitted = path.split(PARAMETERS_DELIMITER);
-        return pathSplitted[1];
+
+    private void handlePostRequest(HttpExchange httpExchange) {
+        String levelId = postRequestParser.parsePostScoreRequestForLevelId(httpExchange.getRequestURI().getPath());
+        String sessionId = postRequestParser.parsePostScoreRequestForSessionKey(httpExchange.getRequestURI().getQuery());
+        Integer score = postRequestParser.parsePostScoreRequestBody(httpExchange);
+        threadPoolService.createAndRunPostUserScoreThread(score, Integer.parseInt(levelId), sessionId);
     }
 
 
-    public String parseLoginUserMessage(String path) {
-        String[] pathSplitted = path.split(URI_DELIMITER);
-        return pathSplitted[0];
+
+    private void handleGetRequest(HttpExchange httpExchange) {
+        switch (getRequestParser.checkGetRequest(httpExchange.getRequestURI().getPath())) {
+            case LOGIN:
+                handleLoginRequest(httpExchange);
+                break;
+            case HIGHSCORE:
+                handleHighScoreListRequest(httpExchange);
+                break;
+            case EMPTY:
+                break;
+        }
+
     }
 
+    private void handleHighScoreListRequest(HttpExchange httpExchange) {
+        final String levelId = getRequestParser.parseHighScoreListRequest(httpExchange.getRequestURI().getPath());
 
-    public MessageInfo checkGetMessage(String path) {
-        String[] pathSplitted = path.split(URI_DELIMITER);
-        return MessageInfo.getMessageInfo(pathSplitted[1]);
     }
+
+    private void handleLoginRequest(HttpExchange httpExchange) {
+        final String userId = getRequestParser.parseLoginUserRequest(httpExchange.getRequestURI().getPath());
+    }
+
 }

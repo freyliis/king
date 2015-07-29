@@ -1,8 +1,6 @@
-package com.king.game.thread;
+package com.king.game.thread.threads;
 
 import com.king.game.service.GameOfThroneService;
-
-import java.util.concurrent.Callable;
 
 public class PostUserScoreThread implements Runnable {
 
@@ -17,7 +15,6 @@ public class PostUserScoreThread implements Runnable {
         this.sessionId = sessionId;
         this.gameOfThroneService = gameOfThroneService;
     }
-
 
     @Override
     public void run() {
