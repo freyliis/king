@@ -4,6 +4,7 @@ import com.king.game.service.GameOfThroneService;
 import com.king.game.thread.ThreadPoolService;
 import com.king.game.thread.threads.HighScoreListThread;
 import com.king.game.thread.threads.PostUserScoreThread;
+import com.king.game.thread.threads.UserLoginThread;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +27,14 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
     }
 
     @Override
-    public String createAndRunUserLoginThread(String userId) {
+    public String createAndRunUserLoginThread(Integer userId) {
+        UserLoginThread userLoginThread = new UserLoginThread(userId, gameOfThroneService);
+        final Future<String> sessionKey = threadPool.submit(userLoginThread);
+        try {
+            return sessionKey.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

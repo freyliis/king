@@ -5,11 +5,15 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class GameHttpHandler implements HttpHandler {
 
     public static final String URI_DELIMITER = "/";
     public static final String PARAMETERS_DELIMITER = "=";
+    private static final int HTTP_OK_STATUS = 200;
+    public static final String POST = "POST";
+    public static final String GET = "GET";
 
     private ThreadPoolService threadPoolService;
     private PostRequestParser postRequestParser;
@@ -24,13 +28,20 @@ public class GameHttpHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         final String requestMethod = httpExchange.getRequestMethod();
-        if (requestMethod.equalsIgnoreCase("POST")) {
+        if (requestMethod.equalsIgnoreCase(POST)) {
             handlePostRequest(httpExchange);
+        } else if (requestMethod.equalsIgnoreCase(GET)) {
+            final String response = handleGetRequest(httpExchange);
+            handleResponse(httpExchange, response);
+        }
+    }
 
-        } else if (requestMethod.equalsIgnoreCase("GET")) {
-            handleGetRequest(httpExchange);
-        } else {
-
+    private void handleResponse(HttpExchange httpExchange, String response) {
+        try (OutputStream os = httpExchange.getResponseBody()){
+            httpExchange.sendResponseHeaders(HTTP_OK_STATUS, response.getBytes().length);
+            os.write(response.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -43,27 +54,29 @@ public class GameHttpHandler implements HttpHandler {
 
 
 
-    private void handleGetRequest(HttpExchange httpExchange) {
+    private String handleGetRequest(HttpExchange httpExchange) {
         switch (getRequestParser.checkGetRequest(httpExchange.getRequestURI().getPath())) {
             case LOGIN:
-                handleLoginRequest(httpExchange);
-                break;
+               return handleLoginRequest(httpExchange);
             case HIGHSCORE:
-                handleHighScoreListRequest(httpExchange);
-                break;
-            case EMPTY:
-                break;
+                return handleHighScoreListRequest(httpExchange);
+            default:
+                return GetRequestInfo.EMPTY.getUriMessage();
         }
-
     }
 
-    private void handleHighScoreListRequest(HttpExchange httpExchange) {
+    private String handleHighScoreListRequest(HttpExchange httpExchange) {
         final String levelId = getRequestParser.parseHighScoreListRequest(httpExchange.getRequestURI().getPath());
-
+        final String highScoreResult = threadPoolService.createAndRunHighScoreListThread(Integer.parseInt(levelId));
+        return highScoreResult;
     }
 
-    private void handleLoginRequest(HttpExchange httpExchange) {
+    private String handleLoginRequest(HttpExchange httpExchange) {
         final String userId = getRequestParser.parseLoginUserRequest(httpExchange.getRequestURI().getPath());
+        final String sessionKey = threadPoolService.createAndRunUserLoginThread(Integer.parseInt(userId));
+        return sessionKey;
     }
+
+
 
 }
