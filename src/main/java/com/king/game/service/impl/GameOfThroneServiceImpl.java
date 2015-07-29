@@ -17,6 +17,11 @@ public class GameOfThroneServiceImpl implements GameOfThroneService {
     private LevelRepository levelRepository;
     private SessionService sessionService;
 
+    public GameOfThroneServiceImpl(LevelRepository levelRepository, SessionService sessionService) {
+        this.levelRepository = levelRepository;
+        this.sessionService = sessionService;
+    }
+
     public Set<Score> getHighscoreList(int levelId) {
         Level level = levelRepository.getLevel(levelId);
         return level.getHighScoreList();
