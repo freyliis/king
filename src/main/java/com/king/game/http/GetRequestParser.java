@@ -15,7 +15,7 @@ public class GetRequestParser extends Parser{
 
     public GetRequestInfo checkGetRequest(String path) {
         String[] pathSplitted = path.split(GameHttpHandler.URI_DELIMITER);
-        return GetRequestInfo.getRequestInfo(pathSplitted[1]);
+        return GetRequestInfo.getRequestInfo(pathSplitted[2]);
     }
 
 }

@@ -23,15 +23,17 @@ public class GameOfThroneServiceImpl implements GameOfThroneService {
     }
 
     public Set<Score> getHighscoreList(int levelId) {
-        Level level = levelRepository.getLevel(levelId);
+        Level level = levelRepository.createOrGetLevel(levelId);
         return level.getHighScoreList();
     }
 
     public void postUserScore(String sessionId, Integer levelId, Integer score) {
         if(sessionService.isSessionKeyActive(sessionId)){
             final Session session = sessionService.getSession(sessionId);
-            Level level = levelRepository.getLevel(levelId);
+            Level level = levelRepository.createOrGetLevel(levelId);
             level.postScore(score, session.getUser());
+        } else {
+            System.out.format("Session %s is not active", sessionId).println();
         }
     }
 

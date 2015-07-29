@@ -21,10 +21,10 @@ public class Main {
 
     private static final String CONTEXT = "/";
     private static final int PORT = 8082;
-    public static final int SESSION_VALID_TIME_IN_MINUTES = 10;
+    public static final int SESSION_VALID_TIME_IN_MINUTES = 1;
 
     public static void main(String[] args) {
-
+        System.out.format("Server runs with: %s, %d", CONTEXT, PORT).println();
         LevelRepository levelRepository = new LevelRepositoryInMemory();
         SessionRepository sessionRepository = new SessionRepositoryInMemory();
         TimeService timeService = new TimeServiceImpl();

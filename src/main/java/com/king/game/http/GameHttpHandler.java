@@ -26,10 +26,10 @@ public class GameHttpHandler implements HttpHandler {
     }
 
     public void handle(HttpExchange httpExchange) throws IOException {
-
         final String requestMethod = httpExchange.getRequestMethod();
         if (requestMethod.equalsIgnoreCase(POST)) {
             handlePostRequest(httpExchange);
+            handleResponse(httpExchange, "");
         } else if (requestMethod.equalsIgnoreCase(GET)) {
             final String response = handleGetRequest(httpExchange);
             handleResponse(httpExchange, response);
@@ -49,6 +49,7 @@ public class GameHttpHandler implements HttpHandler {
         String levelId = postRequestParser.parsePostScoreRequestForLevelId(httpExchange.getRequestURI().getPath());
         String sessionId = postRequestParser.parsePostScoreRequestForSessionKey(httpExchange.getRequestURI().getQuery());
         Integer score = postRequestParser.parsePostScoreRequestBody(httpExchange);
+        System.out.format("Post request received with: %s, %s, %d", levelId, sessionId, score).println();
         threadPoolService.createAndRunPostUserScoreThread(score, Integer.parseInt(levelId), sessionId);
     }
 
@@ -67,13 +68,17 @@ public class GameHttpHandler implements HttpHandler {
 
     private String handleHighScoreListRequest(HttpExchange httpExchange) {
         final String levelId = getRequestParser.parseHighScoreListRequest(httpExchange.getRequestURI().getPath());
+        System.out.format("Get request received with: %s", levelId).println();
         final String highScoreResult = threadPoolService.createAndRunHighScoreListThread(Integer.parseInt(levelId));
+        System.out.format("Response received: %s", highScoreResult).println();
         return highScoreResult;
     }
 
     private String handleLoginRequest(HttpExchange httpExchange) {
         final String userId = getRequestParser.parseLoginUserRequest(httpExchange.getRequestURI().getPath());
+        System.out.format("Get request received with: %s", userId).println();
         final String sessionKey = threadPoolService.createAndRunUserLoginThread(Integer.parseInt(userId));
+        System.out.format("Response received: %s", sessionKey).println();
         return sessionKey;
     }
 

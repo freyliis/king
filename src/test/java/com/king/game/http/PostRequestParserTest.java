@@ -10,7 +10,7 @@ public class PostRequestParserTest {
     @Test
     public void shouldReturnProperLevelIdForPostScoreRequest() {
         final String value = "<levelid>";
-        String path = value+"/score?sessionkey=<sessionkey>";
+        String path = "/"+value+"/score?sessionkey=<sessionkey>";
         String levelId = objectUnderTest.parsePostScoreRequestForLevelId(path);
         Assert.assertThat(levelId, CoreMatchers.is(value));
     }
@@ -18,7 +18,7 @@ public class PostRequestParserTest {
     @Test
     public void shouldReturnProperSessionIdForPostScoreRequest() {
         final String value = "<sessionkey>";
-        String path = "<levelid>/score?sessionkey="+value;
+        String path = "/<levelid>/score?sessionkey="+value;
         String sessionId = objectUnderTest.parsePostScoreRequestForSessionKey(path);
         Assert.assertThat(sessionId, CoreMatchers.is(value));
     }
