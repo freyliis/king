@@ -2,8 +2,8 @@ package com.king.game;
 
 import com.king.game.http.GameHttpHandler;
 import com.king.game.http.GameHttpServer;
-import com.king.game.http.GetRequestParser;
-import com.king.game.http.PostRequestParser;
+import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.RequestParser;
 import com.king.game.service.GameOfThroneService;
 import com.king.game.service.SessionService;
 import com.king.game.service.TimeService;
@@ -31,9 +31,8 @@ public class Main {
         SessionService sessionService = new SessionServiceImpl(sessionRepository, timeService, SESSION_VALID_TIME_IN_MINUTES);
         GameOfThroneService gameOfThroneService = new GameOfThroneServiceImpl(levelRepository, sessionService);
         ThreadPoolService threadPoolService = new ThreadPoolServiceImpl(gameOfThroneService);
-        PostRequestParser postRequestParser = new PostRequestParser();
-        GetRequestParser getRequestParser = new GetRequestParser();
-        GameHttpServer gameHttpServer = new GameHttpServer(PORT, CONTEXT, new GameHttpHandler(threadPoolService, postRequestParser, getRequestParser));
+        Parser getRequestParser = new RequestParser();
+        GameHttpServer gameHttpServer = new GameHttpServer(PORT, CONTEXT, new GameHttpHandler(threadPoolService, getRequestParser));
         gameHttpServer.start();
     }
 }

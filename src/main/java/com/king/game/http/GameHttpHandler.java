@@ -1,5 +1,6 @@
 package com.king.game.http;
 
+import com.king.game.http.parser.Parser;
 import com.king.game.thread.ThreadPoolService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -16,13 +17,11 @@ public class GameHttpHandler implements HttpHandler {
     public static final String GET = "GET";
 
     private ThreadPoolService threadPoolService;
-    private PostRequestParser postRequestParser;
-    private GetRequestParser getRequestParser;
+    private Parser parser;
 
-    public GameHttpHandler(ThreadPoolService threadPoolService, PostRequestParser postRequestParser, GetRequestParser getRequestParser) {
+    public GameHttpHandler(ThreadPoolService threadPoolService, Parser parser) {
         this.threadPoolService = threadPoolService;
-        this.postRequestParser = postRequestParser;
-        this.getRequestParser = getRequestParser;
+        this.parser = parser;
     }
 
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -46,9 +45,9 @@ public class GameHttpHandler implements HttpHandler {
     }
 
     private void handlePostRequest(HttpExchange httpExchange) {
-        String levelId = postRequestParser.parsePostScoreRequestForLevelId(httpExchange.getRequestURI().getPath());
-        String sessionId = postRequestParser.parsePostScoreRequestForSessionKey(httpExchange.getRequestURI().getQuery());
-        Integer score = postRequestParser.parsePostScoreRequestBody(httpExchange);
+        String levelId = parser.parsePostScoreRequestForLevelId(httpExchange.getRequestURI().getPath());
+        String sessionId = parser.parsePostScoreRequestForSessionKey(httpExchange.getRequestURI().getQuery());
+        Integer score = parser.parsePostScoreRequestBody(httpExchange);
         System.out.format("Post request received with: %s, %s, %d", levelId, sessionId, score).println();
         threadPoolService.createAndRunPostUserScoreThread(score, Integer.parseInt(levelId), sessionId);
     }
@@ -56,18 +55,18 @@ public class GameHttpHandler implements HttpHandler {
 
 
     private String handleGetRequest(HttpExchange httpExchange) {
-        switch (getRequestParser.checkGetRequest(httpExchange.getRequestURI().getPath())) {
+        switch (parser.parseRequest(httpExchange.getRequestURI().getPath())) {
             case LOGIN:
                return handleLoginRequest(httpExchange);
             case HIGHSCORE:
                 return handleHighScoreListRequest(httpExchange);
             default:
-                return GetRequestInfo.EMPTY.getUriMessage();
+                return RequestInfo.EMPTY.getUriMessage();
         }
     }
 
     private String handleHighScoreListRequest(HttpExchange httpExchange) {
-        final String levelId = getRequestParser.parseHighScoreListRequest(httpExchange.getRequestURI().getPath());
+        final String levelId = parser.parseHighScoreListRequest(httpExchange.getRequestURI().getPath());
         System.out.format("Get request received with: %s", levelId).println();
         final String highScoreResult = threadPoolService.createAndRunHighScoreListThread(Integer.parseInt(levelId));
         System.out.format("Response received: %s", highScoreResult).println();
@@ -75,7 +74,7 @@ public class GameHttpHandler implements HttpHandler {
     }
 
     private String handleLoginRequest(HttpExchange httpExchange) {
-        final String userId = getRequestParser.parseLoginUserRequest(httpExchange.getRequestURI().getPath());
+        final String userId = parser.parseLoginUserRequest(httpExchange.getRequestURI().getPath());
         System.out.format("Get request received with: %s", userId).println();
         final String sessionKey = threadPoolService.createAndRunUserLoginThread(Integer.parseInt(userId));
         System.out.format("Response received: %s", sessionKey).println();
