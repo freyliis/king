@@ -1,7 +1,7 @@
 package com.king.game.http.handler;
 
 import com.king.game.http.RequestMethod;
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.PostScoreRequestParser;
 import com.king.game.service.GameContext;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -11,9 +11,9 @@ import com.sun.net.httpserver.HttpExchange;
 public class PostScoreRequestHandler extends AbstractRequestHandler {
     private final RequestMethod validRequestMethod;
     private GameContext gameContext;
-    private Parser parser;
+    private PostScoreRequestParser parser;
 
-    public PostScoreRequestHandler(GameContext gameContext, Parser parser) {
+    public PostScoreRequestHandler(GameContext gameContext, PostScoreRequestParser parser) {
         this.gameContext = gameContext;
         this.parser = parser;
         this.validRequestMethod = RequestMethod.POST;

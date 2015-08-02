@@ -1,7 +1,7 @@
 package com.king.game.http.handler;
 
 import com.king.game.http.RequestMethod;
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.LoginRequestParser;
 import com.king.game.service.GameContext;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -11,10 +11,10 @@ import com.sun.net.httpserver.HttpExchange;
 public class GetLoginRequestHandler extends AbstractRequestHandler {
 
     private GameContext gameContext;
-    private Parser parser;
+    private LoginRequestParser parser;
     private RequestMethod validRequestMethod;
 
-    public GetLoginRequestHandler(GameContext gameContext, Parser parser) {
+    public GetLoginRequestHandler(GameContext gameContext, LoginRequestParser parser) {
         this.gameContext = gameContext;
         this.parser = parser;
         this.validRequestMethod = RequestMethod.GET;

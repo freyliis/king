@@ -1,6 +1,6 @@
 package com.king.game.http.handler;
 
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.PostScoreRequestParser;
 import com.king.game.service.GameContext;
 import com.king.game.service.ScoreService;
 import com.king.model.Score;
@@ -33,7 +33,7 @@ public class PostScoreRequestHandlerTest {
     @Mock
     HttpExchange httpExchange;
     @Mock
-    Parser parser;
+    PostScoreRequestParser parser;
     @Mock
     GameContext gameContext;
     @Mock

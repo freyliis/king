@@ -1,6 +1,6 @@
 package com.king.game.http.handler;
 
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.LoginRequestParser;
 import com.king.game.service.GameContext;
 import com.king.game.service.LoginService;
 import com.sun.net.httpserver.HttpExchange;
@@ -31,7 +31,7 @@ public class GetLoginRequestHandlerTest {
     @Mock
     HttpExchange httpExchange;
     @Mock
-    Parser parser;
+    LoginRequestParser parser;
     @Mock
     GameContext gameContext;
     @Mock

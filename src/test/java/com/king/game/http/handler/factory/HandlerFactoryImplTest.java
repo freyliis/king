@@ -2,7 +2,8 @@ package com.king.game.http.handler.factory;
 
 import com.king.game.http.RequestInfo;
 import com.king.game.http.handler.*;
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.RequestParser;
+import com.king.game.http.parser.impl.ParserHandler;
 import com.king.game.service.GameContext;
 import com.sun.net.httpserver.HttpExchange;
 import org.hamcrest.CoreMatchers;
@@ -27,10 +28,12 @@ import static org.mockito.Mockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(  URI.class )
 public class HandlerFactoryImplTest {
+    HandlerFactoryImpl objectUnderTest;
 
-    HandlerFactoryImpl objectUnderTest = new HandlerFactoryImpl();
+ @Mock
+    ParserHandler parserHandler;
     @Mock
-    Parser parser;
+    RequestParser parser;
     @Mock
     GameContext gameContext;
     @Mock
@@ -42,33 +45,34 @@ public class HandlerFactoryImplTest {
         MockitoAnnotations.initMocks(this);
         when(httpExchange.getRequestURI()).thenReturn(uri);
         when(uri.getPath()).thenReturn("");
+        objectUnderTest = new HandlerFactoryImpl(parserHandler,gameContext,parser );
     }
 
     @Test
     public void shouldReturnLoginRequesthHandler(){
         when(parser.parseRequest(anyString())).thenReturn(RequestInfo.LOGIN);
-        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange, parser, gameContext);
+        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange);
         Assert.assertThat(requestHandler, CoreMatchers.instanceOf(GetLoginRequestHandler.class));
     }
 
     @Test
     public void shouldReturnHighscoreListRequestHandler(){
         when(parser.parseRequest(anyString())).thenReturn(RequestInfo.HIGHSCORE);
-        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange, parser, gameContext);
+        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange);
         Assert.assertThat(requestHandler, CoreMatchers.instanceOf(GetHighscoreListRequestHandler.class));
     }
 
     @Test
     public void shouldReturnPostScoreRequestHandler(){
         when(parser.parseRequest(anyString())).thenReturn(RequestInfo.POST_SCORE);
-        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange, parser, gameContext);
+        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange);
         Assert.assertThat(requestHandler, CoreMatchers.instanceOf(PostScoreRequestHandler.class));
     }
 
     @Test
     public void shouldReturnNotValidRequestHandler(){
         when(parser.parseRequest(anyString())).thenReturn(RequestInfo.EMPTY);
-        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange, parser, gameContext);
+        final RequestHandler requestHandler = objectUnderTest.getRequestHandler(httpExchange);
         Assert.assertThat(requestHandler, CoreMatchers.instanceOf(NotValidRequestHandler.class));
     }
 

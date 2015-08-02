@@ -1,6 +1,6 @@
 package com.king.game.http.handler;
 
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.HighScoreRequestParser;
 import com.king.game.service.GameContext;
 import com.king.game.service.ScoreService;
 import com.king.model.Score;
@@ -33,7 +33,7 @@ public class GetHighscoreListRequestHandlerTest {
     @Mock
     HttpExchange httpExchange;
     @Mock
-    Parser parser;
+    HighScoreRequestParser parser;
     @Mock
     GameContext gameContext;
     @Mock

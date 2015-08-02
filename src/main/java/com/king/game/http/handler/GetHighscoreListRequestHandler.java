@@ -1,7 +1,7 @@
 package com.king.game.http.handler;
 
 import com.king.game.http.RequestMethod;
-import com.king.game.http.parser.Parser;
+import com.king.game.http.parser.HighScoreRequestParser;
 import com.king.game.service.GameContext;
 import com.king.model.Score;
 import com.sun.net.httpserver.HttpExchange;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class GetHighscoreListRequestHandler extends AbstractRequestHandler {
 
     private GameContext gameContext;
-    private Parser parser;
+    private HighScoreRequestParser parser;
     private RequestMethod validRequestMethod;
 
-    public GetHighscoreListRequestHandler(GameContext gameContext, Parser parser) {
+    public GetHighscoreListRequestHandler(GameContext gameContext, HighScoreRequestParser parser) {
         this.gameContext = gameContext;
         this.parser = parser;
         this.validRequestMethod = RequestMethod.GET;
