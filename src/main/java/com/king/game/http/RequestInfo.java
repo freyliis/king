@@ -2,7 +2,7 @@ package com.king.game.http;
 
 public enum RequestInfo {
 
-    LOGIN("login"), HIGHSCORE("highscorelist"), EMPTY("");
+    LOGIN("login"), HIGHSCORE("highscorelist"), POST_SCORE("score"), EMPTY("");
 
     private String uriMessage;
 

@@ -8,12 +8,30 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeServiceImpl implements TimeService {
 
-    public long calculateAbsDifferenceInNano(LocalDateTime start, LocalDateTime end) {
+    private final long timelapse;
+    private final TimeUnit timeUnit;
+
+    public TimeServiceImpl(final long timelapse, final TimeUnit timeUnit) {
+        this.timelapse = timelapse;
+        this.timeUnit = timeUnit;
+    }
+
+    public boolean isTimelapseTooHigh(LocalDateTime start, LocalDateTime end  ) {
+        long sessionValidTimeInNanos = convertTimeToNanos(timelapse, timeUnit);
+        final long nanos = calculateAbsDifferenceInNano(start, end);
+        if(nanos > sessionValidTimeInNanos ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private long calculateAbsDifferenceInNano(LocalDateTime start, LocalDateTime end) {
         final long nanos = Duration.between(start, end).toNanos();
         return Math.abs(nanos);
     }
 
-    public long convertMinutesToNanos(long minutes) {
-        return TimeUnit.NANOSECONDS.convert(minutes, TimeUnit.MINUTES);
+    private long convertTimeToNanos(long time, TimeUnit timeUnit) {
+        return TimeUnit.NANOSECONDS.convert(time, timeUnit);
     }
 }

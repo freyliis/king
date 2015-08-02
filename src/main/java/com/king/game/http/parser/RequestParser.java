@@ -1,6 +1,5 @@
 package com.king.game.http.parser;
 
-import com.king.game.http.GameHttpHandler;
 import com.king.game.http.RequestInfo;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -11,11 +10,12 @@ import java.io.InputStream;
 /**
  * Created by freyliis
  */
-public class RequestParser implements Parser {
+public class RequestParser {
+
 
     public String getFirstUrlPart(String path) {
-        String[] pathSplitted = path.split(GameHttpHandler.URI_DELIMITER);
-        return pathSplitted[1];
+        String[] pathSplitted = path.split(Parser.URI_DELIMITER);
+        return pathSplitted[0];
     }
 
     public String parseLoginUserRequest(String path) {
@@ -27,8 +27,8 @@ public class RequestParser implements Parser {
     }
 
     public RequestInfo parseRequest(String path) {
-        String[] pathSplitted = path.split(GameHttpHandler.URI_DELIMITER);
-        return RequestInfo.getRequestInfo(pathSplitted[2]);
+        String[] pathSplitted = path.split(Parser.URI_DELIMITER);
+        return RequestInfo.getRequestInfo(pathSplitted[1]);
     }
 
     ///<levelid>/score?sessionkey=<sessionkey>
@@ -37,11 +37,11 @@ public class RequestParser implements Parser {
     }
     //sessionkey=<sessionkey>
     public String parsePostScoreRequestForSessionKey(String path) {
-        String[] pathSplitted = path.split(GameHttpHandler.PARAMETERS_DELIMITER);
+        String[] pathSplitted = path.split(Parser.PARAMETERS_DELIMITER);
         return pathSplitted[1];
     }
 
-    public Integer parsePostScoreRequestBody(HttpExchange httpExchange) {
+    public String parsePostScoreRequestBody(HttpExchange httpExchange) {
         InputStream in = httpExchange.getRequestBody();
         String score = "";
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -52,8 +52,9 @@ public class RequestParser implements Parser {
             score = new String(out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
+            return e.getLocalizedMessage();
         }
-        return Integer.parseInt(score);
+        return score;
     }
 
 }

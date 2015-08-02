@@ -5,13 +5,13 @@ import java.util.UUID;
 
 public class Session {
 
-    private UUID sessionId;
-    private LocalDateTime sessionStartTime;
-    private User user;
+    private final UUID sessionId;
+    private final LocalDateTime sessionStartTime;
+    private final Integer userId;
 
     public Session(Integer userId) {
         this.sessionId = UUID.randomUUID();
-        this.user = new User(userId);
+        this.userId = userId;
         sessionStartTime = LocalDateTime.now();
     }
 
@@ -24,7 +24,7 @@ public class Session {
         return sessionStartTime;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 }

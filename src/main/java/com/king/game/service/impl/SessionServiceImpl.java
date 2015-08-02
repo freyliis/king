@@ -10,24 +10,16 @@ import java.time.LocalDateTime;
 public class SessionServiceImpl implements SessionService {
 
     private SessionRepository sessionRepository;
-    private long sessionValidTimeInMinutes = 10l;
     private TimeService timeService;
 
-    public SessionServiceImpl(SessionRepository sessionRepository, TimeService timeService, long sessionValidTimeInMinutes) {
+    public SessionServiceImpl(SessionRepository sessionRepository, TimeService timeService) {
         this.sessionRepository = sessionRepository;
         this.timeService = timeService;
-        this.sessionValidTimeInMinutes = sessionValidTimeInMinutes;
     }
 
     public boolean isSessionKeyActive(String sessionKey) {
         final Session session = sessionRepository.getSession(sessionKey);
-        long sessionValidTimeInNanos = timeService.convertMinutesToNanos(sessionValidTimeInMinutes);
-        final long nanos = timeService.calculateAbsDifferenceInNano(LocalDateTime.now(), session.getSessionStartTime());
-        if(nanos > sessionValidTimeInNanos) {
-            return false;
-        } else {
-            return true;
-        }
+        return !timeService.isTimelapseTooHigh(LocalDateTime.now(), session.getSessionStartTime());
     }
 
     public Session createSession(Integer userId) {

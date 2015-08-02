@@ -1,14 +1,12 @@
 package com.king.model.comparator.highscore;
 
 import com.king.model.Score;
-import com.king.model.User;
 import com.king.model.comparator.highscore.impl.HighScoreReverseOrderComparator;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -17,11 +15,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class HighScoreReverseOrderComparatorTest {
 
-    @Mock
-    User user;
-    Score score1 = new Score(user, 100);
-    Score score2 = new Score(user, 100);
-    Score score3 = new Score(user, 200);
+    Score score1 = new Score(1, 100);
+    Score score2 = new Score(2, 100);
+    Score score3 = new Score(3, 200);
     HighScoreReverseOrderComparator objectUndertest = new HighScoreReverseOrderComparator();
 
     @Test

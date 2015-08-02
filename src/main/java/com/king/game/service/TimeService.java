@@ -4,6 +4,5 @@ import java.time.LocalDateTime;
 
 public interface TimeService {
 
-    long calculateAbsDifferenceInNano(LocalDateTime start, LocalDateTime end);
-    long convertMinutesToNanos(long minutes);
+    boolean isTimelapseTooHigh(LocalDateTime start, LocalDateTime end );
 }

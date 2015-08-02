@@ -1,11 +1,11 @@
 package com.king.model;
 
-import java.util.Set;
+import java.util.List;
 
 public class Level {
 
-    private Integer levelId;
-    private ScoreList scoreList;
+    private final Integer levelId;
+    private final ScoreList scoreList;
 
     public Level(Integer levelId, ScoreList highScoreList) {
         this.levelId = levelId;
@@ -20,13 +20,13 @@ public class Level {
         return levelId;
     }
 
-    public Set<Score> getHighScoreList() {
+    public List<Score> getHighScoreList() {
         return scoreList.getHighScoreList();
     }
 
-    public void postScore(Integer scoreInt, User user) {
-            Score score = new Score(user, scoreInt);
+    public void postScore(Integer scoreInt, Integer userId) {
+            Score score = new Score(userId, scoreInt);
             scoreList.addScoreToScoreList(score);
-            System.out.format("Score %d added to level %d for user %d", scoreInt, levelId, user.getUserId()).println();
+            System.out.format("Score %d added to level %d for user %d", scoreInt, levelId, userId).println();
     }
 }

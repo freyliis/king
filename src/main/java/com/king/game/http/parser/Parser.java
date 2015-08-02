@@ -8,11 +8,14 @@ import com.sun.net.httpserver.HttpExchange;
  */
 public interface Parser {
 
+    public static final String URI_DELIMITER = "/";
+    public static final String PARAMETERS_DELIMITER = "=";
+
     String parsePostScoreRequestForLevelId(String request);
 
     String parsePostScoreRequestForSessionKey(String request);
 
-    Integer parsePostScoreRequestBody(HttpExchange httpExchange);
+    String parsePostScoreRequestBody(HttpExchange httpExchange);
 
     RequestInfo parseRequest(String path);
 

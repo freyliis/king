@@ -6,31 +6,38 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 public class TimeServiceImplTest {
 
-    TimeService objectUnderTest = new TimeServiceImpl();
+    TimeService objectUnderTest;
 
     @Test
-    public void shouldRetrun1NanoDifferenceWhenIncreasing(){
+    public void shouldRetrunTrueWhenTimelapseIsTooHigh(){
+        objectUnderTest = new TimeServiceImpl(1l, TimeUnit.NANOSECONDS);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime after1Nano = now.plusNanos(2);
+        final boolean timelapseTooHigh = objectUnderTest.isTimelapseTooHigh(now, after1Nano );
+        Assert.assertThat(timelapseTooHigh, CoreMatchers.is(Boolean.TRUE));
+    }
+
+    @Test
+    public void shouldRetrunFalseWhenTimelapseIsNotTooHigh(){
+        objectUnderTest = new TimeServiceImpl(1l, TimeUnit.MINUTES);
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime after1Nano = now.plusNanos(1);
-        final long difference = objectUnderTest.calculateAbsDifferenceInNano(now, after1Nano);
-        Assert.assertThat(difference, CoreMatchers.is(1l));
+        final boolean timelapseTooHigh = objectUnderTest.isTimelapseTooHigh(now, after1Nano);
+        Assert.assertThat(timelapseTooHigh, CoreMatchers.is(Boolean.FALSE));
     }
 
     @Test
-    public void shouldRetrun1NanoDifferenceWhenDecreasing(){
+    public void shouldRetrunFalseWhenTimelapseIsEqual(){
+        objectUnderTest = new TimeServiceImpl(1l, TimeUnit.NANOSECONDS);
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime after1Nano = now.minusNanos(1);
-        final long difference = objectUnderTest.calculateAbsDifferenceInNano(now, after1Nano);
-        Assert.assertThat(difference, CoreMatchers.is(1l));
+        LocalDateTime after1Nano = now.plusNanos(1);
+        final boolean timelapseTooHigh = objectUnderTest.isTimelapseTooHigh(now, after1Nano);
+        Assert.assertThat(timelapseTooHigh, CoreMatchers.is(Boolean.FALSE));
     }
 
-    @Test
-    public void shouldReturnProperNanoSecondsCountFrom1Minute(){
-        final long nanoSeconds = objectUnderTest.convertMinutesToNanos(1l);
-        Double minuteInNano = 1*60*Math.pow(10,9);
-        Assert.assertThat(nanoSeconds, CoreMatchers.is(minuteInNano.longValue()));
-    }
+
 }

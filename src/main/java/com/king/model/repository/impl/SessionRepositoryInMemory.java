@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public class SessionRepositoryInMemory implements SessionRepository{
 
-    private ConcurrentMap<String, Session> sessionMap;
+    private final ConcurrentMap<String, Session> sessionMap;
 
     public SessionRepositoryInMemory() {
         sessionMap = new ConcurrentHashMap<>();
