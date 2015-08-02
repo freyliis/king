@@ -3,6 +3,7 @@ package com.king.model;
 import com.king.model.comparator.highscore.HighScoreComparator;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class ScoreList {
     }
 
     public Set<Score> getHighScoreList() {
-        Supplier<SortedSet<Score>> supplier = () -> new TreeSet<Score>(highScoreComparator);
+        Supplier<SortedSet<Score>> supplier = () -> new ConcurrentSkipListSet<>(highScoreComparator);
         Set<Score> scores = scoreSet.stream().limit(highScoreListSize).collect(Collectors.toCollection(supplier));
         return scores;
     }
