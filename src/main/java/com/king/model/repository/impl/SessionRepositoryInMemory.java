@@ -3,16 +3,16 @@ package com.king.model.repository.impl;
 import com.king.model.Session;
 import com.king.model.repository.SessionRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class SessionRepositoryInMemory implements SessionRepository{
 
-    private Map<String, Session> sessionMap;
+    private ConcurrentMap<String, Session> sessionMap;
 
     public SessionRepositoryInMemory() {
-        sessionMap = new HashMap<String, Session>();
+        sessionMap = new ConcurrentHashMap<>();
     }
 
     public void saveSession(Session session) {
